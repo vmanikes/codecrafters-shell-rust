@@ -14,6 +14,7 @@ fn main() {
             handle_exit(&command);
         } else if command.contains("echo") {
             handle_echo(&command);
+            command.clear();
         } else {
             println!("{}: command not found", command.trim());
             command.clear();
