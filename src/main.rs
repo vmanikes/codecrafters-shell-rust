@@ -11,6 +11,8 @@ fn main() {
 
     // Wait for user input
     let stdin = io::stdin();
-    let mut input = String::new();
-    stdin.read_line(&mut input).unwrap();
+    let mut command = String::new();
+    stdin.read_line(&mut command).unwrap();
+
+    println!("{}: command not found", command.trim());
 }
