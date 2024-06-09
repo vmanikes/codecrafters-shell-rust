@@ -3,7 +3,7 @@ use std::io::{self, Write};
 use std::process::exit;
 
 fn main() {
-    let builtin_commands: Vec<&str> = vec!["exit", "echo"];
+    let builtin_commands: Vec<&str> = vec!["exit", "echo", "type"];
 
     let stdin = io::stdin();
     let mut input = String::new();
