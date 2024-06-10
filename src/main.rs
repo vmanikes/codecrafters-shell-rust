@@ -35,7 +35,6 @@ fn main() {
         }
 
         input.clear();
-
         print!("$ ");
         io::stdout().flush().unwrap();
     }
@@ -46,31 +45,31 @@ fn handle_type(builtin_commands: &Vec<&str>, parameters: &Vec<&str>) {
         println!("{} is a shell builtin", parameters[0])
     } else {
         let path = env::var("PATH").unwrap();
-
-        let path_dirs = path.split(":").collect::<Vec<&str>>();
+        let path_dirs = path.split(':').collect::<Vec<&str>>();
 
         for dir in path_dirs {
-            if Path::new(dir).join(parameters[0]).exists() {
-                println!("{} in {}", parameters[0], dir);
+            let full_path = Path::new(dir).join(parameters[0]);
+            if full_path.exists() {
+                println!("{} is {}", parameters[0], full_path.display());
                 return;
             }
         }
 
-        println!("{} not found", parameters[0])
+        println!("{} not found", parameters[0]);
     }
 }
 
 fn handle_echo(parameters: &Vec<&str>) {
-    println!("{}", parameters.join(" ").trim());
+    println!("{}", parameters.join(" "));
 }
 
 fn handle_exit(parameters: &Vec<&str>) {
-    if parameters.len() == 0 {
+    if parameters.is_empty() {
         exit(0)
     }
 
     match parameters[0].trim().parse::<i32>() {
         Ok(val) => exit(val),
-        _ => {exit(0)}
+        Err(_) => exit(0),
     }
 }
