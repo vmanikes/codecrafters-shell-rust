@@ -42,18 +42,30 @@ fn main() {
 }
 
 fn execute_command(command: &str, parameters: &Vec<&str>) {
-    let output = Command::new(command).args(parameters).output();
-
-    match output {
-        Ok(output) => {
-            if output.status.success() {
-                print!("{}", String::from_utf8_lossy(&output.stdout));
-            } else {
-                print!("{}", String::from_utf8_lossy(&output.stderr));
+    match command {
+        "cd" => {
+            match env::set_current_dir(parameters[0]) {
+                Ok(_) => {}
+                Err(_) => {
+                    println!("cd: {}: No such file or directory", parameters[0])
+                }
             }
-        }
-        Err(_) => {
-            println!("{}: command not found", command);
+        },
+        _ => {
+            let output = Command::new(command).args(parameters).output();
+
+            match output {
+                Ok(output) => {
+                    if output.status.success() {
+                        print!("{}", String::from_utf8_lossy(&output.stdout));
+                    } else {
+                        print!("{}", String::from_utf8_lossy(&output.stderr));
+                    }
+                }
+                Err(_) => {
+                    println!("{}: command not found", command);
+                }
+            }
         }
     }
 }
