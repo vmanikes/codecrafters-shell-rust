@@ -2,7 +2,7 @@ use std::env;
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::path::Path;
-use std::process::exit;
+use std::process::{Command, exit};
 
 fn main() {
     let builtin_commands: Vec<&str> = vec!["exit", "echo", "type"];
@@ -29,7 +29,8 @@ fn main() {
                     handle_type(&builtin_commands, &parameters);
                 },
                 _ => {
-                    println!("{}: command not found", command[0].trim());
+                    execute_command(command[0], &parameters);
+                    // println!("{}: command not found", command[0].trim());
                 }
             }
         }
@@ -37,6 +38,23 @@ fn main() {
         input.clear();
         print!("$ ");
         io::stdout().flush().unwrap();
+    }
+}
+
+fn execute_command(command: &str, parameters: &Vec<&str>) {
+    let output = Command::new(command).args(parameters).output();
+
+    match output {
+        Ok(output) => {
+            if output.status.success() {
+                print!("{}", String::from_utf8_lossy(&output.stdout));
+            } else {
+                print!("{}", String::from_utf8_lossy(&output.stderr));
+            }
+        }
+        Err(_) => {
+            println!("{}: command not found", command);
+        }
     }
 }
 
