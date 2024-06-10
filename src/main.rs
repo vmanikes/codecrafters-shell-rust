@@ -44,10 +44,17 @@ fn main() {
 fn execute_command(command: &str, parameters: &Vec<&str>) {
     match command {
         "cd" => {
-            match env::set_current_dir(parameters[0]) {
-                Ok(_) => {}
-                Err(_) => {
-                    println!("cd: {}: No such file or directory", parameters[0])
+            match parameters[0] {
+                "~" => {
+                    let _ = env::set_current_dir(env::var("HOME").unwrap());
+                },
+                _ => {
+                    match env::set_current_dir(parameters[0]) {
+                        Ok(_) => {}
+                        Err(_) => {
+                            println!("cd: {}: No such file or directory", parameters[0])
+                        }
+                    }
                 }
             }
         },
