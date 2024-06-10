@@ -1,0 +1,1 @@
+pub const SHELL_SIGN: &str = "$";
